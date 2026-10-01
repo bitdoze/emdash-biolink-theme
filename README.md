@@ -1,6 +1,6 @@
 # Biolink — a link-in-bio theme for EmDash
 
-A blocks-based link-in-bio theme for [EmDash](https://emdashhq.com/), the CMS built on Astro. Give creators a page they fully control: profile, social links, custom links, projects, embeds — all edited as reorderable blocks in the admin UI, with per-page theming.
+A blocks-based link-in-bio theme for [EmDash](https://emdashhq.com/), the CMS built on Astro — running on **Cloudflare Workers** with D1 and R2. Give creators a page they fully control: profile, social links, custom links, projects, embeds — all edited as reorderable blocks in the admin UI, with per-page theming.
 
 <p align="center">
 	<img src="docs/screenshot-dark.png" alt="Biolink theme — dark mode" width="360" />
@@ -8,7 +8,9 @@ A blocks-based link-in-bio theme for [EmDash](https://emdashhq.com/), the CMS bu
 	<img src="docs/screenshot-light.png" alt="Biolink theme — light mode" width="360" />
 </p>
 
-- **Stack:** Astro 7 + [EmDash CMS](https://emdashhq.com/) + SQLite + local file storage
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/bitdoze/emdash-biolink-theme)
+
+- **Stack:** Astro 7 + [EmDash CMS](https://emdashhq.com/) on Cloudflare Workers (D1 database, R2 media storage)
 - **Rendering:** server-side (`output: "server"`), no client JS except a tiny theme toggle
 - **Icons:** [astro-icon](https://github.com/natemoo-re/astro-icon) with Simple Icons + Lucide — pick icons from a dropdown, no SVG hunting
 - **Plugins:** none — every field is a built-in EmDash field type
@@ -57,13 +59,7 @@ Then open the admin and complete the setup wizard:
 - **Site:** http://localhost:4321
 - **Admin:** http://localhost:4321/_emdash/admin
 
-The wizard runs migrations and applies `seed/seed.json`, which creates the **Bio Pages** collection, all block types, and a demo profile you can edit or replace. The demo avatar is downloaded from a remote URL during seeding.
-
-If you ever need to re-apply the seed manually:
-
-```bash
-npx emdash seed
-```
+Local development uses workerd, so D1 and R2 are emulated on your machine — no Cloudflare account needed until you deploy. The wizard runs migrations and applies `seed/seed.json`, which creates the **Bio Pages** collection, all block types, and a demo profile you can edit or replace. The demo avatar is downloaded from a remote URL during seeding.
 
 ## Editing your page
 
@@ -90,22 +86,39 @@ EmDash core has no color field, so the theme offers both presets and free-form o
 
 Create more Bio Pages in the admin to publish additional link pages — each keeps its own blocks and theme. A page with slug `links` renders at `/links`. `home` always renders at `/` and `/home` redirects there.
 
+## Deploying
+
+The fastest path is the **Deploy to Cloudflare** button at the top — Workers Builds clones the repo, builds it, and provisions the D1 database and R2 bucket from `wrangler.jsonc` automatically.
+
+From the CLI instead:
+
+```bash
+npx wrangler login
+npm run deploy          # astro build && wrangler deploy
+```
+
+Before deploying, edit `wrangler.jsonc` to rename the worker, D1 database (`emdash-biolink`) and R2 bucket (`emdash-biolink-media`) to your liking. The first deployment provisions both. See [Deploy to Cloudflare](https://docs.emdashcms.com/deployment/cloudflare/) in the EmDash docs for production details (custom domains, migrations, media delivery).
+
+Prefer a Node.js server instead? The theme's pages and components are runtime-agnostic — swap `astro.config.mjs` to `@astrojs/node` + `sqlite()`/`local()` drivers (see [Deploy to Node.js](https://docs.emdashcms.com/deployment/nodejs/)) and `wrangler.jsonc`/`src/worker.ts` can be deleted.
+
 ## Commands
 
 ```bash
-npm run dev          # dev server
+npm run dev          # dev server (workerd, with local D1/R2)
 npm run build        # production build → dist/
-npm run preview      # local preview of the build
-npm start            # serve the production build (Node standalone)
+npm run preview      # preview the built worker locally
+npm run deploy       # astro build && wrangler deploy
 npm run typecheck    # astro check
-npx emdash seed      # apply seed/seed.json
+npx wrangler types   # regenerate worker-configuration.d.ts
 npx emdash types     # regenerate emdash-env.d.ts from the schema
+npx emdash seed      # apply seed/seed.json (local SQLite only)
 ```
 
 ## Project structure
 
 ```
 seed/seed.json            schema + block types + demo content
+src/worker.ts             Workers entry: fetch handler + scheduled handler
 src/pages/index.astro     / → the "home" profile (or newest profile)
 src/pages/[slug].astro    /:slug → any other Bio Page
 src/components/BioPage.astro   page shell: header, theming, footer, toggle
@@ -116,25 +129,17 @@ src/icons.ts              network/icon key → Iconify name + label
 src/utils/theme.ts        palettes, color math, CSS variable generation
 src/utils/embed.ts        embed provider resolution
 src/styles/theme.css      the design system (CSS variables + components)
+wrangler.jsonc            worker name + D1/R2 bindings + cron trigger
 ```
 
-## Deployment
+## Environment and secrets
 
-The site is a standard Node.js Astro app (`@astrojs/node` standalone). Build it and run the server, setting the environment your `astro.config.mjs` expects:
-
-```bash
-npm run build
-npm start          # serves dist/server/entry.mjs
-```
-
-To deploy on Cloudflare Workers or another runtime, swap the adapter and the `emdash()` database/storage drivers in `astro.config.mjs` — see [the EmDash deployment docs](https://docs.emdashcms.com/).
-
-## Environment
-
-`EMDASH_ENCRYPTION_KEY` is only needed to encrypt plugin secrets. This theme uses no plugins, so it can stay unset — see `.env.example`. Generate one if you add plugins later:
+`EMDASH_ENCRYPTION_KEY` is only needed to encrypt plugin secrets. This theme uses no plugins, so it can stay unset — see `.env.example`. If you add plugins later, generate one and store it as a Worker secret:
 
 ```bash
-npx emdash secrets generate
+npx emdash secrets generate        # print a new key
+# local dev: put it in .dev.vars
+npx wrangler secret put EMDASH_ENCRYPTION_KEY   # production
 ```
 
 ## Built with

@@ -5,11 +5,14 @@ whose layout is an ordered list of content blocks.
 ## Commands
 
 ```bash
-npm run dev           # Start the Astro dev server
-npm run build         # Production build (Node standalone)
+npm run dev           # Astro dev server on workerd (local D1/R2 emulation)
+npm run build         # Production build → dist/
+npm run preview       # Preview the built worker locally
+npm run deploy        # astro build && wrangler deploy
 npm run typecheck     # astro check
+npx wrangler types    # Regenerate worker-configuration.d.ts
 npx emdash types      # Regenerate TypeScript types (emdash-env.d.ts)
-npx emdash seed       # Apply seed/seed.json to the database
+npx emdash seed       # Apply seed/seed.json (local SQLite DB only)
 ```
 
 The admin UI is at `http://localhost:4321/_emdash/admin`.
@@ -18,7 +21,10 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 
 | File                          | Purpose                                                                  |
 | ----------------------------- | ------------------------------------------------------------------------ |
-| `astro.config.mjs`            | Astro config: `emdash()` integration, SQLite, local storage, astro-icon  |
+| `astro.config.mjs`            | Astro config: `emdash()` integration, D1, R2, astro-icon                 |
+| `src/worker.ts`               | Cloudflare Workers entry: fetch handler + cron scheduled handler         |
+| `wrangler.jsonc`              | Worker name, `DB` (D1) + `MEDIA` (R2) bindings, cron trigger             |
+| `worker-configuration.d.ts`   | Generated binding types (`wrangler types`)                               |
 | `src/live.config.ts`          | EmDash loader registration (boilerplate -- don't modify)                 |
 | `seed/seed.json`              | Schema definition + demo content (blockTypes, `profiles` collection)     |
 | `emdash-env.d.ts`             | Generated types -- `Profile`, `ProfileLayout*Block` union                 |
@@ -50,6 +56,7 @@ This template ships with `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`
 ## Rules
 
 - All content pages must be server-rendered (`output: "server"`). No `getStaticPaths()` for CMS content.
+- The site runs on Cloudflare Workers: `d1({ binding: "DB" })` + `r2({ binding: "MEDIA" })` from `@emdash-cms/cloudflare`, bindings declared in `wrangler.jsonc`. No Node-only APIs in request-path code.
 - Image fields are objects (`{ src, alt }`), not strings. Use `<Image image={...} />` from `"emdash/ui"`.
 - `entry.id` is the slug (for URLs). `entry.data.id` is the database ULID (for API calls like `getEntryTerms`).
 - When Astro's cache is enabled, pass content-query hints to `Astro.cache.set(cacheHint)`. Use the `WithCacheHint` variants for site settings, menus, taxonomies, and widget areas rendered by cached routes.
