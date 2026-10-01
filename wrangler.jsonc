@@ -3,7 +3,9 @@
 	"name": "emdash-biolink",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-02-24",
-	"compatibility_flags": ["nodejs_compat"],
+	// nodejs_compat_populate_process_env exposes Worker vars/secrets on
+	// process.env, which is where EmDash reads EMDASH_SITE_URL at runtime.
+	"compatibility_flags": ["nodejs_compat", "nodejs_compat_populate_process_env"],
 	"d1_databases": [
 		{
 			"binding": "DB",
