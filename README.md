@@ -35,14 +35,16 @@ A blocks-based link-in-bio theme for [EmDash](https://emdashhq.com/), the CMS bu
 
 ## Getting started
 
-Clone the repository and install:
+Scaffold a new site from the theme with `npm create astro`:
 
 ```bash
-git clone https://github.com/bitdoze/emdash-biolink-theme.git my-links
+npm create astro@latest -- my-links --template github:bitdoze/emdash-biolink-theme --no-ai
 cd my-links
 npm install
 npm run dev
 ```
+
+(`--no-ai` keeps the theme's own `AGENTS.md` — otherwise create-astro replaces it with generic Astro docs. Plain `git clone` works too: clone, `npm install`, `npm run dev`.)
 
 Then open the admin and complete the setup wizard:
 
