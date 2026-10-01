@@ -2,6 +2,12 @@
 
 A blocks-based link-in-bio theme for [EmDash](https://emdashhq.com/), the CMS built on Astro. Give creators a page they fully control: profile, social links, custom links, projects, embeds — all edited as reorderable blocks in the admin UI, with per-page theming.
 
+<p align="center">
+	<img src="docs/screenshot-dark.png" alt="Biolink theme — dark mode" width="360" />
+	&nbsp;&nbsp;
+	<img src="docs/screenshot-light.png" alt="Biolink theme — light mode" width="360" />
+</p>
+
 - **Stack:** Astro 7 + [EmDash CMS](https://emdashhq.com/) + SQLite + local file storage
 - **Rendering:** server-side (`output: "server"`), no client JS except a tiny theme toggle
 - **Icons:** [astro-icon](https://github.com/natemoo-re/astro-icon) with Simple Icons + Lucide — pick icons from a dropdown, no SVG hunting
