@@ -1,0 +1,50 @@
+---
+import { Icon as AstroIcon } from "astro-icon/components";
+import type { ProfileLayoutEmbedBlock } from "../../../emdash-env";
+import { resolveEmbed } from "../../utils/embed";
+
+const { value } = Astro.props as { value: ProfileLayoutEmbedBlock };
+const embed = resolveEmbed(value.url);
+---
+
+{
+	embed ? (
+		<figure class="bio-embed">
+			{embed.kind === "video" ? (
+				<div class="bio-embed-video">
+					<iframe
+						src={embed.src}
+						title={embed.title}
+						loading="lazy"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen
+					/>
+				</div>
+			) : (
+				<div class="bio-embed-audio">
+					<iframe
+						src={embed.src}
+						title={embed.title}
+						loading="lazy"
+						allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+					/>
+				</div>
+			)}
+			{value.caption && <figcaption>{value.caption}</figcaption>}
+		</figure>
+	) : (
+		value.url && (
+			<figure class="bio-embed">
+				<a
+					class="bio-embed-fallback"
+					href={value.url}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<AstroIcon name="lucide:play" is:inline aria-hidden="true" />
+					<span>{value.caption ?? value.url}</span>
+				</a>
+			</figure>
+		)
+	)
+}

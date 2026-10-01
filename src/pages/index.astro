@@ -1,0 +1,44 @@
+---
+import { getEmDashCollection, getEmDashEntry } from "emdash";
+import BioPage from "../components/BioPage.astro";
+
+// The "home" profile renders at /. If it's missing, fall back to the most
+// recently published Bio Page so the site still renders something useful.
+const home = await getEmDashEntry("profiles", "home");
+let entry = home.entry;
+let cacheHint = home.cacheHint;
+
+if (!entry) {
+	const result = await getEmDashCollection("profiles", {
+		limit: 1,
+		orderBy: { published_at: "desc" },
+	});
+	entry = result.entries[0];
+	cacheHint = result.cacheHint;
+}
+
+if (Astro.cache?.enabled && cacheHint) Astro.cache.set(cacheHint);
+---
+
+{
+	entry ? (
+		<BioPage entry={entry} />
+	) : (
+		<html lang="en">
+			<head>
+				<meta charset="UTF-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<title>Welcome</title>
+			</head>
+			<body style="font-family: system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0;">
+				<div style="text-align: center; max-width: 30rem;">
+					<h1>No bio page yet</h1>
+					<p>
+						Create a Bio Page in the{" "}
+						<a href="/_emdash/admin">admin panel</a> and it will appear here.
+					</p>
+				</div>
+			</body>
+		</html>
+	)
+}

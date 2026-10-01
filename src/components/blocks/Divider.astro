@@ -1,0 +1,16 @@
+---
+import type { ProfileLayoutDividerBlock } from "../../../emdash-env";
+
+const { value } = Astro.props as { value: ProfileLayoutDividerBlock };
+const style = value.style === "dots" || value.style === "space" ? value.style : "line";
+---
+
+{
+	style === "dots" ? (
+		<div class="bio-divider bio-divider-dots" aria-hidden="true">
+			<span />
+		</div>
+	) : (
+		<hr class={`bio-divider bio-divider-${style}`} aria-hidden="true" />
+	)
+}

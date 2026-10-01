@@ -1,0 +1,27 @@
+---
+import { getEmDashEntry, decodeSlug } from "emdash";
+import BioPage from "../components/BioPage.astro";
+
+const slug = decodeSlug(Astro.params.slug);
+
+if (!slug) {
+	return Astro.rewrite("/404");
+}
+
+// The "home" profile lives at /.
+if (slug === "home") {
+	return Astro.redirect("/", 301);
+}
+
+const { entry, error, cacheHint } = await getEmDashEntry("profiles", slug);
+
+if (error) {
+	return new Response("Could not load this page", { status: 500 });
+}
+if (!entry) {
+	return Astro.rewrite("/404");
+}
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<BioPage entry={entry} />

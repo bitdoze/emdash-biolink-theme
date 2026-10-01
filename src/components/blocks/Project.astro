@@ -1,0 +1,35 @@
+---
+import { Image } from "emdash/ui";
+import { Icon as AstroIcon } from "astro-icon/components";
+import type { ProfileLayoutProjectBlock } from "../../../emdash-env";
+
+const { value } = Astro.props as { value: ProfileLayoutProjectBlock };
+const image = value.image && (value.image.id || value.image.src) ? value.image : null;
+const initial = (value.title ?? "?").trim().charAt(0).toUpperCase();
+const Tag = value.url ? "a" : "div";
+---
+
+<Tag
+	class="bio-project"
+	href={value.url ?? undefined}
+	target={value.url ? "_blank" : undefined}
+	rel={value.url ? "noopener noreferrer" : undefined}
+>
+	<span class="bio-project-thumb">
+		{
+			image ? (
+				<Image image={image} width={176} height={176} alt={value.title} />
+			) : (
+				<span aria-hidden="true">{initial}</span>
+			)
+		}
+	</span>
+	<span class="bio-project-body">
+		<span class="bio-project-top">
+			<span class="bio-project-title">{value.title}</span>
+			{value.tag && <span class="bio-project-tag">{value.tag}</span>}
+		</span>
+		{value.description && <span class="bio-project-desc">{value.description}</span>}
+	</span>
+	{value.url && <AstroIcon name="lucide:arrow-up-right" is:inline class="bio-link-chevron" aria-hidden="true" />}
+</Tag>

@@ -1,0 +1,10 @@
+---
+import type { ProfileLayoutHeadingBlock } from "../../../emdash-env";
+
+const { value } = Astro.props as { value: ProfileLayoutHeadingBlock };
+---
+
+<div class="bio-heading">
+	<h2 class="bio-heading-title">{value.title}</h2>
+	{value.subtitle && <p class="bio-heading-sub">{value.subtitle}</p>}
+</div>

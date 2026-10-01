@@ -1,0 +1,28 @@
+---
+import { Icon as AstroIcon } from "astro-icon/components";
+import type { ProfileLayoutLinkListBlock } from "../../../emdash-env";
+import Icon from "../Icon.astro";
+
+const { value } = Astro.props as { value: ProfileLayoutLinkListBlock };
+const links = value.links ?? [];
+
+const isExternal = (url?: string) => !!url && !/^(mailto:|tel:)/i.test(url);
+---
+
+{
+	links.length > 0 && (
+		<div class="bio-linklist">
+			{links.map((link) => (
+				<a
+					href={link.url}
+					target={isExternal(link.url) ? "_blank" : undefined}
+					rel={isExternal(link.url) ? "noopener noreferrer" : undefined}
+				>
+					<Icon name={link.icon} />
+					<span>{link.label}</span>
+					<AstroIcon name="lucide:arrow-up-right" is:inline class="bio-linklist-arrow" aria-hidden="true" />
+				</a>
+			))}
+		</div>
+	)
+}

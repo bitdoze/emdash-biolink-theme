@@ -1,0 +1,31 @@
+---
+import { Image } from "emdash/ui";
+import { Icon as AstroIcon } from "astro-icon/components";
+import type { ProfileLayoutLinkBlock } from "../../../emdash-env";
+import Icon from "../Icon.astro";
+
+const { value } = Astro.props as { value: ProfileLayoutLinkBlock };
+const newTab = value.new_tab !== false;
+const thumb =
+	value.thumbnail && (value.thumbnail.id || value.thumbnail.src) ? value.thumbnail : null;
+---
+
+<a
+	class:list={["bio-card", value.featured && "bio-card--featured"]}
+	href={value.url}
+	target={newTab ? "_blank" : undefined}
+	rel={newTab ? "noopener noreferrer" : undefined}
+>
+	{
+		(thumb || value.icon) && (
+			<span class="bio-card-icon">
+				{thumb ? <Image image={thumb} width={88} height={88} alt="" /> : <Icon name={value.icon} />}
+			</span>
+		)
+	}
+	<span class="bio-card-body">
+		<span class="bio-card-title">{value.title}</span>
+		{value.description && <span class="bio-card-desc">{value.description}</span>}
+	</span>
+	<AstroIcon name="lucide:arrow-up-right" is:inline class="bio-link-chevron" aria-hidden="true" />
+</a>

@@ -1,0 +1,24 @@
+---
+import { Image } from "emdash/ui";
+import type { ProfileLayoutImageBlock } from "../../../emdash-env";
+
+const { value } = Astro.props as { value: ProfileLayoutImageBlock };
+const isExternal = !!value.link && !/^(mailto:|tel:)/i.test(value.link);
+---
+
+<figure class="bio-image">
+	{
+		value.link ? (
+			<a
+				href={value.link}
+				target={isExternal ? "_blank" : undefined}
+				rel={isExternal ? "noopener noreferrer" : undefined}
+			>
+				<Image image={value.image} width={1400} />
+			</a>
+		) : (
+			<Image image={value.image} width={1400} />
+		)
+	}
+	{value.caption && <figcaption>{value.caption}</figcaption>}
+</figure>

@@ -1,0 +1,30 @@
+---
+import { Icon as AstroIcon } from "astro-icon/components";
+import { getIcon } from "../icons";
+
+interface Props {
+	/** Icon key from the `icon`/`network` select fields (see src/icons.ts). */
+	name?: string | null;
+	/** Key to use when `name` is unset or unknown. Defaults to the generic link icon. */
+	fallback?: string;
+	class?: string;
+	size?: number | string;
+	title?: string;
+}
+
+const { name, fallback = "link", class: className, size, title } = Astro.props;
+const entry = getIcon(name) ?? getIcon(fallback);
+---
+
+{
+	entry && (
+		<AstroIcon
+			name={entry.icon as never}
+			is:inline
+			class={className}
+			size={size}
+			title={title ?? entry.label}
+			aria-hidden={title ? undefined : "true"}
+		/>
+	)
+}

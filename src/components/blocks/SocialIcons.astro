@@ -1,0 +1,28 @@
+---
+import type { ProfileLayoutSocialIconsBlock } from "../../../emdash-env";
+import { getIcon } from "../../icons";
+import Icon from "../Icon.astro";
+
+const { value } = Astro.props as { value: ProfileLayoutSocialIconsBlock };
+const links = value.links ?? [];
+
+const isExternal = (url?: string) => !!url && !/^(mailto:|tel:)/i.test(url);
+---
+
+{
+	links.length > 0 && (
+		<nav class="bio-social" aria-label="Social profiles">
+			{links.map((link) => (
+				<a
+					href={link.url}
+					target={isExternal(link.url) ? "_blank" : undefined}
+					rel={isExternal(link.url) ? "noopener noreferrer" : undefined}
+					aria-label={getIcon(link.network)?.label ?? link.url}
+					title={getIcon(link.network)?.label}
+				>
+					<Icon name={link.network} />
+				</a>
+			))}
+		</nav>
+	)
+}

@@ -1,0 +1,162 @@
+---
+import { getSiteSettings, getSeoMeta } from "emdash";
+import { EmDashHead, EmDashBodyStart, EmDashBodyEnd, Image } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import { Icon as AstroIcon } from "astro-icon/components";
+import type { Profile } from "../../emdash-env";
+import BioBlocks from "../components/BioBlocks.astro";
+import { resolveBioTheme } from "../utils/theme";
+import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import "../styles/theme.css";
+
+interface Props {
+	entry: { id: string; data: Profile };
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+
+const theme = resolveBioTheme(data);
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+
+// A pinned light/dark choice wins; "system" follows the visitor's stored
+// `theme` cookie (set by the toggle below) or their OS preference.
+const cookieTheme = Astro.cookies.get("theme")?.value;
+const htmlClass =
+	data.theme_mode === "light" || data.theme_mode === "dark"
+		? data.theme_mode
+		: cookieTheme === "light" || cookieTheme === "dark"
+			? cookieTheme
+			: undefined;
+
+const seo = getSeoMeta(entry as never, {
+	// Skip the site-name suffix when it just repeats the page title.
+	siteTitle: siteTitle === data.title ? undefined : siteTitle || data.title,
+	siteUrl: Astro.url.origin,
+	path: Astro.url.pathname.replace(/\/$/, ""),
+});
+
+const hasAvatar = !!data.avatar && (!!data.avatar.id || !!data.avatar.src);
+const avatarInitial = (data.title ?? "?").trim().charAt(0).toUpperCase();
+
+const pageCtx = createPublicPageContext({
+	Astro,
+	kind: "content",
+	pageType: "website",
+	title: seo.title,
+	pageTitle: seo.ogTitle,
+	description: seo.description,
+	canonical: seo.canonical,
+	content: { collection: "profiles", id: data.id, slug: entry.id },
+	siteName: siteTitle,
+});
+---
+
+<!doctype html>
+<html lang="en" class={htmlClass} style={theme.style}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{seo.title}</title>
+		{seo.description && <meta name="description" content={seo.description} />}
+		<EmDashHead page={pageCtx} />
+	</head>
+	<body>
+		<EmDashBodyStart page={pageCtx} />
+
+		<div class:list={theme.classes}>
+			<div class="bio-bg-art" aria-hidden="true">
+				{
+					data.bg_style === "image" && data.bg_image && (
+						<Image image={data.bg_image} width={1920} alt="" />
+					)
+				}
+			</div>
+
+			<main class="bio-container">
+				<header class="bio-header">
+					{
+						hasAvatar ? (
+							<Image
+								image={data.avatar}
+								class="bio-avatar"
+								width={224}
+								height={224}
+								alt={data.title ?? "Profile picture"}
+								priority
+							/>
+						) : (
+							<div class="bio-avatar-fallback" aria-hidden="true">
+								{avatarInitial}
+							</div>
+						)
+					}
+					<h1 class="bio-name">{data.title}</h1>
+					{
+						data.location && (
+							<span class="bio-location">
+								<AstroIcon name="lucide:map-pin" is:inline aria-hidden="true" />
+								{data.location}
+							</span>
+						)
+					}
+					{data.bio && <p class="bio-bio">{data.bio}</p>}
+				</header>
+
+				<div class="bio-blocks">
+					<BioBlocks value={data.layout} />
+				</div>
+			</main>
+
+			<footer class="bio-footer">
+				{
+					theme.showBranding && (
+						<a
+							class="bio-branding"
+							href="https://emdashhq.com"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<AstroIcon name="lucide:zap" is:inline aria-hidden="true" />
+							Powered by EmDash
+						</a>
+					)
+				}
+			</footer>
+		</div>
+
+		{
+			theme.allowToggle && (
+				<>
+					<button
+						id="bio-theme-toggle"
+						class="bio-theme-toggle"
+						type="button"
+						aria-label="Toggle color scheme"
+					>
+						<AstroIcon name="lucide:sun" is:inline class="bio-icon-sun" aria-hidden="true" />
+						<AstroIcon name="lucide:moon" is:inline class="bio-icon-moon" aria-hidden="true" />
+					</button>
+					<script is:inline>
+						document
+							.getElementById("bio-theme-toggle")
+							?.addEventListener("click", function () {
+								var el = document.documentElement;
+								var isDark =
+									el.classList.contains("dark") ||
+									(!el.classList.contains("light") &&
+										window.matchMedia("(prefers-color-scheme: dark)").matches);
+								var next = isDark ? "light" : "dark";
+								el.classList.remove("light", "dark");
+								el.classList.add(next);
+								document.cookie =
+									"theme=" + next + ";path=/;max-age=31536000;SameSite=Lax";
+							});
+					</script>
+				</>
+			)
+		}
+
+		<EmDashBodyEnd page={pageCtx} />
+	</body>
+</html>

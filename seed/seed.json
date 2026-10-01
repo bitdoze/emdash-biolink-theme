@@ -1,0 +1,451 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Biolink",
+		"description": "A link-in-bio theme for creators: social links, custom links, projects and themeable colors.",
+		"author": "bitdoze"
+	},
+	"settings": {
+		"title": "Dragos Balota",
+		"tagline": "DevOps engineer · blogger · maker"
+	},
+	"blockTypes": [
+		{
+			"slug": "link",
+			"label": "Link",
+			"category": "Links",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "title", "label": "Title", "type": "string", "required": true },
+						{ "slug": "url", "label": "URL", "type": "url", "required": true },
+						{ "slug": "description", "label": "Description", "type": "string" },
+						{
+							"slug": "icon",
+							"label": "Icon",
+							"type": "select",
+							"validation": {
+								"options": ["website", "email", "phone", "link", "x", "instagram", "youtube", "tiktok", "linkedin", "github", "gitlab", "facebook", "threads", "bluesky", "mastodon", "discord", "twitch", "telegram", "whatsapp", "pinterest", "snapchat", "reddit", "spotify", "applemusic", "soundcloud", "bandcamp", "vimeo", "medium", "substack", "patreon", "kofi", "buymeacoffee", "dribbble", "behance", "codepen", "rss"]
+							}
+						},
+						{ "slug": "thumbnail", "label": "Thumbnail", "type": "image" },
+						{ "slug": "featured", "label": "Featured", "type": "boolean", "defaultValue": false },
+						{ "slug": "new_tab", "label": "Open in new tab", "type": "boolean", "defaultValue": true }
+					]
+				}
+			]
+		},
+		{
+			"slug": "link_list",
+			"label": "Link list",
+			"category": "Links",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "links",
+							"label": "Links",
+							"type": "repeater",
+							"validation": {
+								"maxItems": 20,
+								"subFields": [
+									{ "slug": "label", "label": "Label", "type": "string", "required": true },
+									{ "slug": "url", "label": "URL", "type": "url", "required": true },
+									{
+										"slug": "icon",
+										"label": "Icon",
+										"type": "select",
+										"options": ["website", "email", "phone", "link", "x", "instagram", "youtube", "tiktok", "linkedin", "github", "gitlab", "facebook", "threads", "bluesky", "mastodon", "discord", "twitch", "telegram", "whatsapp", "pinterest", "snapchat", "reddit", "spotify", "applemusic", "soundcloud", "bandcamp", "vimeo", "medium", "substack", "patreon", "kofi", "buymeacoffee", "dribbble", "behance", "codepen", "rss"]
+									}
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "social_icons",
+			"label": "Social icons",
+			"category": "Links",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "links",
+							"label": "Profiles",
+							"type": "repeater",
+							"validation": {
+								"minItems": 1,
+								"maxItems": 16,
+								"subFields": [
+									{
+										"slug": "network",
+										"label": "Network",
+										"type": "select",
+										"required": true,
+										"options": ["website", "email", "phone", "x", "instagram", "youtube", "tiktok", "linkedin", "github", "gitlab", "facebook", "threads", "bluesky", "mastodon", "discord", "twitch", "telegram", "whatsapp", "pinterest", "snapchat", "reddit", "spotify", "applemusic", "soundcloud", "bandcamp", "vimeo", "medium", "substack", "patreon", "kofi", "buymeacoffee", "dribbble", "behance", "codepen", "rss"]
+									},
+									{ "slug": "url", "label": "Profile URL", "type": "url", "required": true }
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "heading",
+			"label": "Heading",
+			"category": "Content",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "title", "label": "Title", "type": "string", "required": true },
+						{ "slug": "subtitle", "label": "Subtitle", "type": "string" }
+					]
+				}
+			]
+		},
+		{
+			"slug": "project",
+			"label": "Project",
+			"category": "Showcase",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "title", "label": "Title", "type": "string", "required": true },
+						{ "slug": "description", "label": "Description", "type": "text" },
+						{ "slug": "url", "label": "URL", "type": "url" },
+						{ "slug": "image", "label": "Image", "type": "image" },
+						{ "slug": "tag", "label": "Tag", "type": "string" }
+					]
+				}
+			]
+		},
+		{
+			"slug": "text",
+			"label": "Text",
+			"category": "Content",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [{ "slug": "content", "label": "Content", "type": "portableText" }]
+				}
+			]
+		},
+		{
+			"slug": "image",
+			"label": "Image",
+			"category": "Media",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "image", "label": "Image", "type": "image", "required": true },
+						{ "slug": "caption", "label": "Caption", "type": "string" },
+						{ "slug": "link", "label": "Link URL", "type": "url" }
+					]
+				}
+			]
+		},
+		{
+			"slug": "embed",
+			"label": "Embed",
+			"category": "Media",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{ "slug": "url", "label": "URL", "type": "url", "required": true },
+						{ "slug": "caption", "label": "Caption", "type": "string" }
+					]
+				}
+			]
+		},
+		{
+			"slug": "divider",
+			"label": "Divider",
+			"category": "Content",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "style",
+							"label": "Style",
+							"type": "select",
+							"defaultValue": "line",
+							"validation": { "options": ["line", "dots", "space"] }
+						}
+					]
+				}
+			]
+		}
+	],
+	"collections": [
+		{
+			"slug": "profiles",
+			"label": "Bio Pages",
+			"labelSingular": "Bio Page",
+			"description": "Link-in-bio pages. The entry slugged \"home\" renders at /; other entries render at /{slug}.",
+			"urlPattern": "/{slug}",
+			"supports": ["drafts", "revisions", "preview", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Name", "type": "string", "required": true, "searchable": true },
+				{ "slug": "bio", "label": "Bio", "type": "text", "searchable": true },
+				{ "slug": "avatar", "label": "Profile picture", "type": "image" },
+				{ "slug": "location", "label": "Location / handle", "type": "string" },
+				{
+					"slug": "layout",
+					"label": "Page content",
+					"type": "blocks",
+					"validation": {
+						"allowedTypes": ["social_icons", "link", "link_list", "heading", "project", "text", "image", "embed", "divider"],
+						"maxItems": 60
+					}
+				},
+				{
+					"slug": "theme_mode",
+					"label": "Appearance · Color mode",
+					"type": "select",
+					"defaultValue": "system",
+					"validation": { "options": ["system", "light", "dark"] }
+				},
+				{
+					"slug": "color_scheme",
+					"label": "Appearance · Color scheme",
+					"type": "select",
+					"defaultValue": "violet",
+					"validation": { "options": ["violet", "ocean", "sunset", "forest", "rose", "amber", "candy", "cyber", "mono", "slate"] }
+				},
+				{
+					"slug": "accent_color",
+					"label": "Appearance · Custom accent color (hex, e.g. #7c5cff)",
+					"type": "string"
+				},
+				{
+					"slug": "bg_style",
+					"label": "Appearance · Background style",
+					"type": "select",
+					"defaultValue": "gradient",
+					"validation": { "options": ["gradient", "color", "image"] }
+				},
+				{
+					"slug": "bg_color",
+					"label": "Appearance · Background color (hex, e.g. #0f0f1a)",
+					"type": "string"
+				},
+				{ "slug": "bg_image", "label": "Appearance · Background image", "type": "image" },
+				{
+					"slug": "text_color",
+					"label": "Appearance · Custom text color (hex)",
+					"type": "string"
+				},
+				{
+					"slug": "card_color",
+					"label": "Appearance · Custom card color (hex)",
+					"type": "string"
+				},
+				{
+					"slug": "card_style",
+					"label": "Appearance · Link card style",
+					"type": "select",
+					"defaultValue": "soft",
+					"validation": { "options": ["soft", "outline", "solid", "glass"] }
+				},
+				{
+					"slug": "corner_radius",
+					"label": "Appearance · Corner radius",
+					"type": "select",
+					"defaultValue": "rounded",
+					"validation": { "options": ["rounded", "pill", "sharp"] }
+				},
+				{
+					"slug": "avatar_shape",
+					"label": "Appearance · Avatar shape",
+					"type": "select",
+					"defaultValue": "circle",
+					"validation": { "options": ["circle", "rounded", "square"] }
+				},
+				{
+					"slug": "font",
+					"label": "Appearance · Font",
+					"type": "select",
+					"defaultValue": "modern",
+					"validation": { "options": ["modern", "classic", "mono", "rounded"] }
+				},
+				{
+					"slug": "footer_branding",
+					"label": "Appearance · Show “Powered by EmDash” footer",
+					"type": "boolean",
+					"defaultValue": true
+				}
+			]
+		}
+	],
+	"content": {
+		"profiles": [
+			{
+				"id": "profile-home",
+				"slug": "home",
+				"status": "published",
+				"data": {
+					"title": "Dragos Balota",
+					"bio": "Sole DevOps engineer keeping Linux fleets alive by day — shipping products, writing at bitdoze.com and filming @webdoze by night. Everything I publish is verified hands-on first.",
+					"location": "Bucharest · open to interesting problems",
+					"avatar": {
+						"$media": {
+							"url": "https://github.com/bitdoze.png",
+							"alt": "Dragos Balota",
+							"filename": "dragos-avatar.png"
+						}
+					},
+					"theme_mode": "system",
+					"color_scheme": "violet",
+					"bg_style": "gradient",
+					"card_style": "soft",
+					"corner_radius": "rounded",
+					"avatar_shape": "circle",
+					"font": "modern",
+					"footer_branding": true,
+					"layout": [
+						{
+							"_type": "social_icons",
+							"_version": 1,
+							"_key": "home-social",
+							"links": [
+								{ "network": "github", "url": "https://github.com/bitdoze" },
+								{ "network": "x", "url": "https://x.com/bitdoze" },
+								{ "network": "bluesky", "url": "https://bsky.app/profile/bitdoze.com" },
+								{ "network": "youtube", "url": "https://youtube.com/@webdoze" },
+								{ "network": "website", "url": "https://www.bitdoze.com" }
+							]
+						},
+						{
+							"_type": "heading",
+							"_version": 1,
+							"_key": "home-heading-links",
+							"title": "Find me online",
+							"subtitle": "Writing, video and code"
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "home-link-bitdoze",
+							"title": "bitdoze.com",
+							"description": "My blog on web development, AI, DevOps and self-hosting — every article verified hands-on.",
+							"url": "https://www.bitdoze.com",
+							"icon": "website",
+							"featured": true,
+							"new_tab": true
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "home-link-youtube",
+							"title": "@webdoze on YouTube",
+							"description": "Walkthroughs, tool reviews and build-alongs for developers and self-hosters.",
+							"url": "https://youtube.com/@webdoze",
+							"icon": "youtube",
+							"new_tab": true
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "home-link-theme",
+							"title": "bitdoze-astro-theme",
+							"description": "The Astro + Tailwind theme powering bitdoze.com — open source.",
+							"url": "https://github.com/bitdoze/bitdoze-astro-theme",
+							"icon": "github",
+							"new_tab": true
+						},
+						{
+							"_type": "link_list",
+							"_version": 1,
+							"_key": "home-more-links",
+							"links": [
+								{ "label": "Agent tooling (Mastra & Agno)", "url": "https://github.com/bitdoze/bitdoze-mastra", "icon": "github" },
+								{ "label": "Email me", "url": "mailto:dragos@bitdoze.com", "icon": "email" },
+								{ "label": "RSS feed", "url": "https://www.bitdoze.com/rss.xml", "icon": "rss" }
+							]
+						},
+						{
+							"_type": "heading",
+							"_version": 1,
+							"_key": "home-heading-projects",
+							"title": "Projects",
+							"subtitle": "Things I've built and keep building"
+						},
+						{
+							"_type": "project",
+							"_version": 1,
+							"_key": "home-project-bitdoze",
+							"title": "bitdoze.com",
+							"tag": "flagship",
+							"description": "My blog on web development, AI, DevOps and self-hosting. Real commands, real failure modes, real costs.",
+							"url": "https://www.bitdoze.com"
+						},
+						{
+							"_type": "project",
+							"_version": 1,
+							"_key": "home-project-webdoze",
+							"title": "@webdoze",
+							"tag": "video",
+							"description": "Video companion to the blog: walkthroughs, tool reviews and build-alongs.",
+							"url": "https://youtube.com/@webdoze"
+						},
+						{
+							"_type": "project",
+							"_version": 1,
+							"_key": "home-project-homelab",
+							"title": "Self-hosted platform",
+							"tag": "homelab",
+							"description": "Docker Compose stacks behind Caddy on wildcard DNS — every tool gets a subdomain, a container and an S3 backup job."
+						},
+						{
+							"_type": "divider",
+							"_version": 1,
+							"_key": "home-divider",
+							"style": "dots"
+						},
+						{
+							"_type": "text",
+							"_version": 1,
+							"_key": "home-note",
+							"content": [
+								{
+									"_type": "block",
+									"_key": "home-note-p",
+									"style": "normal",
+									"children": [
+										{
+											"_type": "span",
+											"_key": "home-note-s",
+											"text": "Prefer email? I read everything — say hi and tell me what you're building."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,43 @@
+{
+  "name": "emdash-biolink-theme",
+  "version": "1.0.0",
+  "description": "A link-in-bio theme for EmDash CMS — blocks-based link pages with social icons, projects, themes, and light/dark modes.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitdoze/emdash-biolink-theme.git"
+  },
+  "keywords": [
+    "emdash",
+    "emdash-theme",
+    "astro",
+    "link-in-bio",
+    "biolink"
+  ],
+  "emdash": {
+    "label": "Biolink",
+    "seed": "seed/seed.json"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.5",
+    "@astrojs/react": "^6.0.5",
+    "@iconify-json/lucide": "^1.2.138",
+    "@iconify-json/simple-icons": "^1.2.98",
+    "astro": "^7.3.2",
+    "astro-icon": "^1.2.0",
+    "emdash": "^1.0.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10"
+  }
+}

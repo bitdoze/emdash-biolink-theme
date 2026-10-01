@@ -1,0 +1,34 @@
+---
+import { Blocks } from "emdash/ui";
+import { defineBlockComponents } from "emdash/ui";
+import type { ProfileLayoutBlock } from "../../emdash-env";
+import Link from "./blocks/Link.astro";
+import LinkList from "./blocks/LinkList.astro";
+import SocialIcons from "./blocks/SocialIcons.astro";
+import Heading from "./blocks/Heading.astro";
+import Project from "./blocks/Project.astro";
+import TextBlock from "./blocks/TextBlock.astro";
+import ImageBlock from "./blocks/ImageBlock.astro";
+import EmbedBlock from "./blocks/EmbedBlock.astro";
+import Divider from "./blocks/Divider.astro";
+
+interface Props {
+	value?: readonly ProfileLayoutBlock[] | null;
+}
+
+const components = defineBlockComponents<ProfileLayoutBlock>({
+	link: Link,
+	link_list: LinkList,
+	social_icons: SocialIcons,
+	heading: Heading,
+	project: Project,
+	text: TextBlock,
+	image: ImageBlock,
+	embed: EmbedBlock,
+	divider: Divider,
+});
+
+const { value } = Astro.props;
+---
+
+<Blocks value={value} components={components} />

@@ -1,0 +1,14 @@
+---
+import { PortableText } from "emdash/ui";
+import type { ProfileLayoutTextBlock } from "../../../emdash-env";
+
+const { value } = Astro.props as { value: ProfileLayoutTextBlock };
+---
+
+{
+	value.content && value.content.length > 0 && (
+		<div class="bio-text">
+			<PortableText value={value.content} />
+		</div>
+	)
+}
