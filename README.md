@@ -27,19 +27,96 @@ Profile, socials, links and projects — edited as reorderable blocks in the EmD
 - **No plugins** — everything is a built-in EmDash field type.
 - **Serverless** — Cloudflare Workers + D1 + R2. No server to babysit.
 
-## The block library
+## Working with blocks
 
-| Block         | What it does                                                              |
-| ------------- | ------------------------------------------------------------------------- |
-| Social Icons  | Row of icon buttons linking to profiles                                   |
-| Link          | Full-width card: description, icon or thumbnail, featured style           |
-| Link List     | Compact group of smaller links                                            |
-| Heading       | Section title + optional subtitle                                         |
-| Project       | Card with image, title, description and tag                               |
-| Text          | Free-form rich text                                                       |
-| Image         | Image with optional caption and link                                      |
-| Embed         | YouTube, Vimeo, Spotify, SoundCloud — link fallback for anything else     |
-| Divider       | Line, dots or space                                                       |
+Each Bio Page renders its **Blocks** field top-to-bottom — an ordered stack you build in the admin. In **Bio Pages → your page → Blocks**:
+
+- **Add block** appends a block — pick the type, fill its fields
+- **Drag** blocks to reorder; **duplicate** or **delete** from each block's menu
+- Repeaters inside blocks (e.g. social links) have their own **Add item / remove** controls
+
+A typical layout: Social Icons → Heading → a few Link cards → Link List → Heading → Projects → Divider → Text.
+
+### Social Icons
+
+A row of round icon buttons linking to your profiles — usually the first block on the page.
+
+| Field | Purpose |
+|---|---|
+| Profiles | Repeatable list. **Network** is the icon picker (30+ networks plus website/email/phone); **Profile URL** is the destination. For email use `mailto:you@example.com`, for phone `tel:+…` — those open inline instead of a new tab |
+
+### Link
+
+A full-width call-to-action card — the main way to send visitors somewhere.
+
+| Field | Purpose |
+|---|---|
+| Title / URL | Required — card heading and destination |
+| Description | One-line subtitle under the title |
+| Icon | Dropdown icon shown in the card's tile |
+| Thumbnail | Image shown instead of the icon (wins if both are set) |
+| Featured | Accent-colored border for the card you want people to notice |
+| New tab | Opens the URL in a new tab (on by default — turn off for internal pages) |
+
+### Link List
+
+Compact text rows with an icon and arrow — for secondary links that don't need a full card.
+
+| Field | Purpose |
+|---|---|
+| Links | Repeatable list of **Label**, **URL**, optional **Icon** (defaults to a generic link icon) |
+
+### Heading
+
+A small-caps section title with flanking rules — separates groups of blocks ("Find me online", "Projects").
+
+| Field | Purpose |
+|---|---|
+| Title / Subtitle | Title is required; subtitle sits underneath in muted text |
+
+### Project
+
+A horizontal card — square thumbnail, title + tag, description — for showcasing work.
+
+| Field | Purpose |
+|---|---|
+| Title | Required; first letter is used as the thumbnail fallback if no image is set |
+| Image | Square thumbnail (176px) on the left |
+| Tag | Small badge next to the title — e.g. `Flagship`, `Video`, `Open source` |
+| Description | Up to ~2 lines under the title |
+| URL | Makes the whole card a link with an arrow; leave empty for a non-linked card |
+
+### Text
+
+A rich-text paragraph block — intro notes, disclaimers, contact blurbs. Supports headings, bold/italic, links, lists and quotes via the Portable Text editor.
+
+### Image
+
+A centered image block.
+
+| Field | Purpose |
+|---|---|
+| Image | Required |
+| Caption | Small muted line under the image |
+| Link | Wraps the image in a link (opens in a new tab for external URLs) |
+
+### Embed
+
+Embeds a media provider inline. Supported out of the box:
+
+- **YouTube / Vimeo** — 16:9 video player
+- **Spotify** — compact audio player (tracks, albums, playlists, episodes, shows, artists)
+- **SoundCloud** — compact audio player for any public track or set URL
+- Anything else renders as a styled link card instead of a broken iframe
+
+| Field | Purpose |
+|---|---|
+| URL | The share/watch URL — the theme converts it to the embed URL (e.g. `youtube.com/watch?v=…` or `youtu.be/…` → `youtube.com/embed/…`) |
+| Caption | Optional line under the embed |
+
+### Divider
+
+Visual separator. **Style** options: `line`, `dots`, or `space` (invisible gap — use it to add breathing room).
 
 ## Quick start
 

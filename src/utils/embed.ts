@@ -1,7 +1,7 @@
 /**
  * Resolve a user-supplied URL into an embeddable iframe source.
- * Supports YouTube, Vimeo and Spotify; anything else returns null and the
- * block renders as a regular link card.
+ * Supports YouTube, Vimeo, Spotify and SoundCloud; anything else returns null
+ * and the block renders as a regular link card.
  */
 
 export interface ResolvedEmbed {
@@ -15,6 +15,7 @@ const YOUTUBE =
 	/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 const VIMEO = /vimeo\.com\/(\d+)/;
 const SPOTIFY = /open\.spotify\.com\/(track|album|playlist|episode|show|artist)\/([a-zA-Z0-9]+)/;
+const SOUNDCLOUD = /(?:www\.)?soundcloud\.com\/[\w-]+(?:\/[\w-]+)?(?:\/|$)/;
 
 export function resolveEmbed(url: string | undefined | null): ResolvedEmbed | null {
 	if (!url) return null;
@@ -43,6 +44,15 @@ export function resolveEmbed(url: string | undefined | null): ResolvedEmbed | nu
 			src: `https://open.spotify.com/embed/${sp[1]}/${sp[2]}`,
 			kind: "audio",
 			title: "Spotify player",
+		};
+	}
+
+	const sc = url.match(SOUNDCLOUD);
+	if (sc) {
+		return {
+			src: `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&visual=false`,
+			kind: "audio",
+			title: "SoundCloud player",
 		};
 	}
 
